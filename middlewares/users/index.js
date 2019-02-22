@@ -80,17 +80,39 @@ const usersMiddleware = {
   },
 
   // ---------------------------------------------------------------------------
+  // GET PROFILE BY AUTHENTICATED/AUTHORIZED USER
+  // You have to put the token (such as: )
+  getProfile: async (req, res) => {
+    // get token in request headers
+    const token = req.headers.authorization.split(' ')[1]
+    // the token will be saved somewhere in the frontend
+    // for example, you can save this token in Redux store/state
+
+    // get the decodedUser object after the Authorization token is verified
+    const decodedUser = await helpers.verifyToken(token)
+
+    // check if the decodedUser.sub, the user _id, is exist
+    // decodedUser.sub = '5c6fd1eb739522a11e19923e'
+    if (decodedUser.sub) {
+      const foundUser = await User.findById(decodedUser.sub, {
+        salt: 0,
+        password: 0
+      })
+
+      res.send({
+        message: 'Get my profile',
+        token: token,
+        decodedUser: decodedUser,
+        foundUser: foundUser
+      })
+    }
+  },
+
+  // ---------------------------------------------------------------------------
   getAllUsers: async (req, res) => {
     res.send({
       message: 'Get all users',
       users: await User.find({}, { salt: 0, password: 0 })
-    })
-  },
-
-  // ---------------------------------------------------------------------------
-  getProfile: async (req, res) => {
-    res.send({
-      message: 'Get my profile'
     })
   },
 

@@ -27,6 +27,7 @@ module.exports = {
     return authenticated
   },
 
+  // CREATE A NEW TOKEN WITH PAYLOAD _id
   createToken: async foundUser => {
     // create the payload WITHOUT having the salt & password
     const payload = {
@@ -38,5 +39,23 @@ module.exports = {
 
     // return token to be used later by the frontend
     return token
+  },
+
+  // VERIFY TOKEN
+  verifyToken: async token => {
+    // use try catch to prevent app crashing
+    try {
+      // verify token with the same secret from backend
+      const decoded = await jwt.verify(token, process.env.SECRET)
+      // decoded token example:
+      // { sub: '5c6fd1eb739522a11e19923e', iat: 1550834260 }
+
+      // return decoded object is fine
+      return decoded
+    } catch (error) {
+      // catch the error if it's happen
+      // such as when the token is invalid or decoded is false
+      return error
+    }
   }
 }
