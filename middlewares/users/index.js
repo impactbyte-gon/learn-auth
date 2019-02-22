@@ -16,22 +16,23 @@ const User = mongoose.model('User', {
 
 module.exports = {
   register: async (req, res) => {
-    // slow process, so we use await
+    // using the slow process is a slow process, so we use await
     // destructure salt & password from encryptPassword() function
     const { salt, hashedPassword } = await helpers.encryptPassword(
       req.body.password
     )
 
-    // fast process
+    // creating an object is a fast process
     const newUser = {
       name: req.body.name,
       email: req.body.email,
       salt: salt,
       password: hashedPassword
     }
+    // creating a user in the database is a slow process
     const result = await User.create(newUser)
 
-    // fast process
+    // responding is a fast process
     res.send({
       message: 'Register',
       newUser: newUser,
