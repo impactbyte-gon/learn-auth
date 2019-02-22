@@ -53,20 +53,29 @@ const usersMiddleware = {
     }
 
     // search for matched user's email
-    const foundUser = await User.findOne({ email: user.email })
+    const foundUser = await User.findOne(
+      { email: user.email } // search for email
+    )
 
     // slow process to determine password is matched
-    // result is either true or false
+    // authenticated result is either true or false
     const authenticated = await helpers.comparePassword(
       user.password,
       foundUser.password
     )
 
+    // create token with JWT
+    const token = await helpers.createToken(foundUser)
+
     res.send({
-      message: 'Login',
+      message: 'Login with registered user',
       user: user,
-      foundUser: foundUser,
-      authenticated: authenticated
+      foundUser: {
+        name: foundUser.name,
+        email: foundUser.email
+      },
+      authenticated: authenticated,
+      token: token
     })
   },
 

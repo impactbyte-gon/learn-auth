@@ -1,4 +1,5 @@
 const bcrypt = require('bcrypt')
+const jwt = require('jsonwebtoken')
 
 module.exports = {
   encryptPassword: async plainPassword => {
@@ -24,5 +25,18 @@ module.exports = {
     const authenticated = await bcrypt.compare(password, hash)
 
     return authenticated
+  },
+
+  createToken: async foundUser => {
+    // create the payload WITHOUT having the salt & password
+    const payload = {
+      sub: foundUser._id
+    }
+
+    // create the token using jwt.sign()
+    const token = await jwt.sign(payload, process.env.SECRET)
+
+    // return token to be used later by the frontend
+    return token
   }
 }
