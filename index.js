@@ -9,10 +9,10 @@ app.use(bodyParser.json())
 
 // -----------------------------------------------------------------------------
 
-const root = require('./middlewares/index')
-const users = require('./middlewares/users/index')
+const all = require('./middlewares')
+const users = require('./middlewares/users')
 
-app.get('/', root.getHello)
+app.get('/', all.getHello)
 app.post('/register', users.register)
 app.post('/login', users.login)
 app.get('/users', users.getAllUsers)
