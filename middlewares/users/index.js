@@ -1,19 +1,5 @@
-require('dotenv').config()
-const mongoose = require('mongoose')
-
+const User = require('./model')
 const helpers = require('../../helpers')
-
-mongoose.connect(`${process.env.URL}/${process.env.DB_NAME}`, {
-  useNewUrlParser: true
-})
-
-// User model => users collection
-const User = mongoose.model('User', {
-  name: String,
-  email: String,
-  salt: String,
-  password: String
-})
 
 const usersMiddleware = {
   // ---------------------------------------------------------------------------
