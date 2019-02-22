@@ -8,47 +8,15 @@ const port = 8000
 app.use(bodyParser.json())
 
 // -----------------------------------------------------------------------------
-// MONGOOSE
-require('dotenv').config()
-const mongoose = require('mongoose')
 
-mongoose.connect(`${process.env.URL}/${process.env.DB_NAME}`, {
-  useNewUrlParser: true
-})
+const root = require('./middlewares/index')
+const users = require('./middlewares/users/index')
 
-// User model => users collection
-const User = mongoose.model('User', {
-  name: String,
-  email: String
-})
-
-// -----------------------------------------------------------------------------
-
-app.get('/', (req, res) => {
-  res.send({
-    message: 'Hello World'
-  })
-})
-
-app.get('/users', async (req, res) => {
-  res.send({
-    message: 'List of all users',
-    users: await User.find()
-  })
-})
-
-app.post('/users', async (req, res) => {
-  const newUser = new User({
-    name: req.body.name || null,
-    email: req.body.email || null
-  })
-  await newUser.save()
-
-  res.send({
-    message: 'Created new user',
-    newUser: newUser
-  })
-})
+app.get('/', root.getHello)
+app.post('/register', users.register)
+app.post('/login', users.login)
+app.get('/users', users.getAllUsers)
+app.get('/profile', users.getProfile)
 
 // -----------------------------------------------------------------------------
 
