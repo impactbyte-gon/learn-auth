@@ -45,8 +45,17 @@ const usersMiddleware = {
   // ---------------------------------------------------------------------------
   // LOGIN WITH REGISTERED USER
   login: async (req, res) => {
+    // get email & password from body
+    const user = {
+      email: req.body.email,
+      password: req.body.password
+    }
+
+    console.log(user)
+
     res.send({
-      message: 'Login'
+      message: 'Login',
+      user: user
     })
   },
 
