@@ -14,8 +14,16 @@ const User = mongoose.model('User', {
 
 module.exports = {
   register: async (req, res) => {
+    const newUser = {
+      name: req.body.name,
+      email: req.body.email,
+      password: req.body.password
+    }
+    console.log(newUser)
+
     res.send({
-      message: 'Register'
+      message: 'Register',
+      newUser: newUser
     })
   },
 
@@ -27,13 +35,20 @@ module.exports = {
 
   getAllUsers: async (req, res) => {
     res.send({
-      message: 'Get all users'
+      message: 'Get all users',
+      users: await User.find()
     })
   },
 
   getProfile: async (req, res) => {
     res.send({
       message: 'Get my profile'
+    })
+  },
+
+  seedUsers: async (req, res) => {
+    res.send({
+      message: 'Seed users'
     })
   }
 }
