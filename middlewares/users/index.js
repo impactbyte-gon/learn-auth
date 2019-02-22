@@ -1,5 +1,6 @@
 require('dotenv').config()
 const mongoose = require('mongoose')
+
 const helpers = require('../../helpers')
 
 mongoose.connect(`${process.env.URL}/${process.env.DB_NAME}`, {
@@ -51,11 +52,21 @@ const usersMiddleware = {
       password: req.body.password
     }
 
-    console.log(user)
+    // search for matched user's email
+    const foundUser = await User.findOne({ email: user.email })
+
+    // slow process to determine password is matched
+    // result is either true or false
+    const authenticated = await helpers.comparePassword(
+      user.password,
+      foundUser.password
+    )
 
     res.send({
       message: 'Login',
-      user: user
+      user: user,
+      foundUser: foundUser,
+      authenticated: authenticated
     })
   },
 

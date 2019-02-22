@@ -16,5 +16,13 @@ module.exports = {
       salt,
       hashedPassword
     }
+  },
+
+  comparePassword: async (password, hash) => {
+    // slow process to determine password is matched
+    // result is either true or false
+    const authenticated = await bcrypt.compare(password, hash)
+
+    return authenticated
   }
 }
